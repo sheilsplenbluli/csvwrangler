@@ -17,7 +17,14 @@ def diff_rows(
 
     Each output row has a '_diff' field: 'added', 'removed', or 'modified'.
     Unchanged rows are omitted.
+
+    Raises:
+        ValueError: If key_cols is empty or contains columns not present in
+                    any row of either dataset.
     """
+    if not key_cols:
+        raise ValueError("key_cols must not be empty")
+
     left_index = {_row_key(r, key_cols): r for r in left}
     right_index = {_row_key(r, key_cols): r for r in right}
 
