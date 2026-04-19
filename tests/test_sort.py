@@ -57,3 +57,10 @@ def test_sort_preserves_all_rows():
 
 def test_sort_empty():
     assert sort_rows([], key="name") == []
+
+
+def test_sort_does_not_mutate_input():
+    """sort_rows should return a new list and not modify the original."""
+    original_order = [r["name"] for r in ROWS]
+    sort_rows(ROWS, key="name")
+    assert [r["name"] for r in ROWS] == original_order
