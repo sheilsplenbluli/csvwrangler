@@ -51,3 +51,15 @@ def test_no_subcommand_exits(tmp_path):
     src = _write_csv(tmp_path, rows)
     with pytest.raises(SystemExit):
         run([src])
+
+
+def test_rownum_starts_at_one_and_increments(tmp_path, capsys):
+    """Row numbers should start at 1 and increment for each row."""
+    rows = [{"x": "a"}, {"x": "b"}, {"x": "c"}]
+    src = _write_csv(tmp_path, rows)
+    run([src, "add-rownum"])
+    out = capsys.readouterr().out
+    result = list(csv.DictReader(io.StringIO(out)))
+    assert result[0]["rownum"] == "1"
+    assert result[1]["rownum"] == "2"
+    assert result[2]["rownum"] == "3"
