@@ -42,6 +42,12 @@ def test_fill_forward_no_prior_value_stays_empty():
     assert result[0]["v"] == ""
 
 
+def test_fill_forward_does_not_mutate_original():
+    rows = [{"v": "1"}, {"v": ""}]
+    fill_forward(rows, "v")
+    assert rows[1]["v"] == ""
+
+
 def test_fill_backward_basic():
     rows = [{"v": ""}, {"v": ""}, {"v": "3"}]
     result = fill_backward(rows, "v")
@@ -53,6 +59,12 @@ def test_fill_backward_no_later_value_stays_empty():
     rows = [{"v": "x"}, {"v": ""}]
     result = fill_backward(rows, "v")
     assert result[1]["v"] == ""
+
+
+def test_fill_backward_does_not_mutate_original():
+    rows = [{"v": ""}, {"v": "3"}]
+    fill_backward(rows, "v")
+    assert rows[0]["v"] == ""
 
 
 def test_fill_many_value():
