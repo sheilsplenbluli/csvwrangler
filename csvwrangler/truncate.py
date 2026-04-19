@@ -23,6 +23,8 @@ def truncate_column(
     """Truncate values in a single column."""
     if max_len < 0:
         raise ValueError("max_len must be >= 0")
+    if suffix and len(suffix) > max_len:
+        raise ValueError("suffix length cannot exceed max_len")
     result = []
     for row in rows:
         new_row = dict(row)
