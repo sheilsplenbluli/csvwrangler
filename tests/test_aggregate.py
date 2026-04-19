@@ -59,3 +59,19 @@ def test_non_numeric_returns_empty():
 def test_empty_rows():
     result = aggregate_rows([], ["dept"], {"n": "count:salary"})
     assert result == []
+
+
+def test_multiple_group_keys():
+    """Group by more than one column and verify aggregation still works."""
+    rows = [
+        {"dept": "eng", "level": "senior", "salary": "120000"},
+        {"dept": "eng", "level": "senior", "salary": "110000"},
+        {"dept": "eng", "level": "junior", "salary": "80000"},
+        {"dept": "hr", "level": "senior", "salary": "90000"},
+    ]
+    result = aggregate_rows(rows, ["dept", "level"], {"n": "count:salary", "total": "sum:salary"})
+    by_key = {(r["dept"], r["level"]): r for r in result}
+    assert by_key[("eng", "senior")]["n"] == "2"
+    assert by_key[("eng", "senior")]["total"] == "230000.0"
+    assert by_key[("eng", "junior")]["n"] == "1"
+    assert by_key[("hr", "senior")]["total"] == "90000.0"
