@@ -10,8 +10,15 @@ Row = Dict[str, str]
 
 
 def _load_csv(path: str) -> List[Row]:
-    with open(path, newline="", encoding="utf-8") as fh:
-        return list(csv.DictReader(fh))
+    try:
+        with open(path, newline="", encoding="utf-8") as fh:
+            return list(csv.DictReader(fh))
+    except FileNotFoundError:
+        print(f"Error: file not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    except PermissionError:
+        print(f"Error: permission denied: {path}", file=sys.stderr)
+        sys.exit(1)
 
 
 def _write_csv(rows: List[Row], path: str) -> None:
