@@ -26,6 +26,23 @@ def join_rows(
     how: str = "inner",
     suffixes: tuple = ("_x", "_y"),
 ) -> List[Row]:
+    """Join two lists of row dicts on a common key column.
+
+    Args:
+        left: The left table as a list of row dicts.
+        right: The right table as a list of row dicts.
+        on: The column name to join on. Must exist in both tables.
+        how: Join type — one of 'inner', 'left', or 'right'.
+        suffixes: Tuple of (left_suffix, right_suffix) appended to overlapping
+            column names (excluding the join key). Defaults to ('_x', '_y').
+
+    Returns:
+        A list of merged row dicts representing the joined table.
+
+    Raises:
+        ValueError: If ``how`` is not one of the supported join types.
+        KeyError: If the ``on`` column is missing from any row in either table.
+    """
     if not left or not right:
         return []
 
