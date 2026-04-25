@@ -45,7 +45,18 @@ def run(argv: list[str] | None = None) -> None:
 
     rows = _load_csv(args.file)
 
+    if not rows:
+        print("error: CSV file is empty or has no data rows.", file=sys.stderr)
+        sys.exit(1)
+
     if args.col:
+        if args.col not in rows[0]:
+            available = ", ".join(rows[0].keys())
+            print(
+                f"error: column '{args.col}' not found. Available columns: {available}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
         summaries = [summarize_column(rows, args.col)]
     else:
         summaries = summarize_all(rows)
