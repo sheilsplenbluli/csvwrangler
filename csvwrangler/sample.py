@@ -48,3 +48,24 @@ def tail_rows(rows: List[Row], n: int) -> List[Row]:
     if n < 0:
         raise ValueError(f"n must be non-negative, got {n}")
     return rows[-n:] if n else []
+
+
+def every_nth_row(rows: List[Row], n: int, offset: int = 0) -> List[Row]:
+    """Return every *n*-th row, starting from *offset*.
+
+    Useful for systematic sampling, e.g. taking every 10th row for a quick
+    sanity check without relying on randomness.
+
+    Args:
+        rows: The source rows to sample from.
+        n: Step size; must be a positive integer.
+        offset: Index of the first row to include (0-based). Defaults to 0.
+
+    Raises:
+        ValueError: If *n* is not positive or *offset* is negative.
+    """
+    if n <= 0:
+        raise ValueError(f"n must be a positive integer, got {n}")
+    if offset < 0:
+        raise ValueError(f"offset must be non-negative, got {offset}")
+    return rows[offset::n]
