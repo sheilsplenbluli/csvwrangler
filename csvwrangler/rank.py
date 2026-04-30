@@ -2,6 +2,8 @@
 from __future__ import annotations
 from typing import List, Dict, Any, Optional
 
+VALID_METHODS = {"average", "min", "max", "dense", "rownum"}
+
 
 def _try_float(v: str) -> Optional[float]:
     try:
@@ -20,9 +22,21 @@ def rank_column(
     """Add a rank column based on values in *column*.
 
     method: 'average' | 'min' | 'max' | 'dense' | 'rownum'
+
+    Raises:
+        ValueError: If *method* is not one of the supported ranking methods.
+        ValueError: If *column* is an empty string.
     """
     if not rows:
         return []
+
+    if not column:
+        raise ValueError("column must be a non-empty string")
+
+    if method not in VALID_METHODS:
+        raise ValueError(
+            f"Invalid method {method!r}. Must be one of: {sorted(VALID_METHODS)}"
+        )
 
     indexed = [(i, _try_float(r.get(column, ""))) for i, r in enumerate(rows)]
     numeric = [(i, v) for i, v in indexed if v is not None]
